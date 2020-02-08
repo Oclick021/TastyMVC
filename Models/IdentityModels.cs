@@ -29,5 +29,7 @@ namespace TastyMVC.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<TastyMVC.Models.Recipe> Recipes { get; set; }
     }
 }

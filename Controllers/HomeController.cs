@@ -12,6 +12,7 @@ namespace TastyMVC.Controllers
         {
             return View();
         }
+        [Route("About")]
 
         public ActionResult About()
         {
@@ -19,6 +20,7 @@ namespace TastyMVC.Controllers
 
             return View();
         }
+        [Route("Contact")]
 
         public ActionResult Contact()
         {
