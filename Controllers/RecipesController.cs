@@ -9,22 +9,47 @@ using System.Web.Mvc;
 using TastyMVC.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using TastyMVC.ViewModels;
 
 namespace TastyMVC
 {
-
+    [Authorize]
     public class RecipesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        private ApplicationUser currentUser;
+        public RecipesController()
+        {
+            currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+        }
         // GET: Recipes
         public ActionResult Index()
         {
-            ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
-            return View(db.Recipes.Where(x=>x.CreatedBy.Id == user.Id).ToList());
+            return View(db.Recipes.Include(r => r.Thumbnail).Where(x => x.CreatedBy.ToString() == currentUser.Id).ToList());
         }
 
-  
+        public ActionResult Publish(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Recipe recipe = db.Recipes.Find(id);
+            if (recipe.CreatedBy ==currentUser.Id)
+            {
+                recipe.Published = !recipe.Published;
+                db.Entry(recipe).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+        
+        }
+
+
         // GET: Recipes/Details/5
         public ActionResult Details(Guid? id)
         {
@@ -32,10 +57,23 @@ namespace TastyMVC
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Recipe recipe = db.Recipes.Find(id);
+            Recipe recipe = db.Recipes
+                .Where(x => x.Id == id)
+                .Include(r => r.Ingredients.Select(x => x.Ingredient))
+                .Include(r => r.Ingredients.Select(x => x.Unit))
+                .Include(r => r.Steps.Select(x => x.Image))
+                .Include(r => r.Thumbnail).FirstOrDefault();
             if (recipe == null)
             {
                 return HttpNotFound();
+            }
+            if (recipe.CreatedBy == currentUser.Id)
+            {
+                ViewBag.IsOwner = true;
+            }
+            else
+            {
+                ViewBag.IsOwner = false;
             }
             return View(recipe);
         }
@@ -43,7 +81,9 @@ namespace TastyMVC
         // GET: Recipes/Create
         public ActionResult Create()
         {
-            return View();
+            var allIngredients = db.Ingredients.GroupBy(x => x.Name).Select(x => x.FirstOrDefault()).ToList();
+            var allMeasurments = db.MeasurementUnits.ToList();
+            return View(new Recipe());
         }
 
         // POST: Recipes/Create
@@ -51,17 +91,126 @@ namespace TastyMVC
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,portion")] Recipe recipe)
+        public ActionResult Create(Recipe recipe)
         {
             if (ModelState.IsValid)
             {
                 recipe.Id = Guid.NewGuid();
+                ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+                recipe.CreatedBy = user.Id;
+
+                if (Request.Files.Count > 0)
+                {
+                    recipe.Thumbnail = new Image(Request.Files[0]);
+                }
+
                 db.Recipes.Add(recipe);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             return View(recipe);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddIngredient(AddIngredientViewModel addIngredientViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var ingredient = db.Ingredients.Where(x => x.Name == addIngredientViewModel.Ingredient).FirstOrDefault();
+                if (ingredient == null)
+                {
+                    ingredient = new Ingredient() { Name = addIngredientViewModel.Ingredient };
+                    db.Ingredients.Add(ingredient);
+                    db.SaveChanges();
+                }
+
+                var ingredientSize = new IngredientSize()
+                {
+                    Amount = addIngredientViewModel.Amount,
+                    IngredientID = ingredient.Id,
+                    UnitID = addIngredientViewModel.Unit
+                };
+
+                var recipe = db.Recipes.Where(x => x.Id == addIngredientViewModel.RecipeID).Include(x => x.Ingredients).FirstOrDefault();
+
+                recipe.Ingredients.Add(ingredientSize);
+
+                db.Entry(recipe).State = EntityState.Modified;
+                db.SaveChanges();
+
+            }
+
+            return RedirectToAction("Details", new { id = addIngredientViewModel.RecipeID });
+        }
+        public ActionResult DeleteIngredient(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var foodIngredient = db.IngredientSizes.Find(id);
+            if (foodIngredient == null)
+            {
+                return HttpNotFound();
+            }
+            var recipeId = foodIngredient.RecipeId;
+            db.IngredientSizes.Remove(foodIngredient);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = recipeId });
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddStep(AddFoodStepViewModel addFoodStepViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var ingredientSize = new RecipeStep()
+                {
+                    Description = addFoodStepViewModel.Description,
+                    Title = addFoodStepViewModel.Title,
+                    Order = addFoodStepViewModel.Order,
+                    RecipeID = addFoodStepViewModel.RecipeID
+                };
+
+                if (Request.Files.Count > 0)
+                {
+                    ingredientSize.Image = new Image(Request.Files[0]);
+                }
+                var recipe = db.Recipes.Where(x => x.Id == addFoodStepViewModel.RecipeID).Include(x => x.Ingredients).FirstOrDefault();
+
+                recipe.Steps.Add(ingredientSize);
+
+                db.Entry(recipe).State = EntityState.Modified;
+                db.SaveChanges();
+
+            }
+
+            return RedirectToAction("Details", new { id = addFoodStepViewModel.RecipeID });
+        }
+        public ActionResult DeleteStep(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var recipeStep = db.RecipeSteps.Find(id);
+            if (recipeStep == null)
+            {
+                return HttpNotFound();
+            }
+            var recipeId = recipeStep.RecipeID;
+            db.RecipeSteps.Remove(recipeStep);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = recipeId });
         }
 
         // GET: Recipes/Edit/5

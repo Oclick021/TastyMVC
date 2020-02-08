@@ -1,18 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Web;
 
 namespace TastyMVC.Models
 {
-    public class Ingredient
+    public class MeasurementUnit
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
-
-        public Guid Id { get; set; }
-        [Required]
-
+        public Guid ID { get; set; }
         public string Name { get; set; }
-
     }
 }

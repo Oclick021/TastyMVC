@@ -1,0 +1,32 @@
+﻿@model TastyMVC.Models.RecipeStep
+@{
+    var stepColumnSize = "col-md-12";
+    if (Model.Image != null)
+    {
+        stepColumnSize = "col-md-9";
+    }
+}
+<div class="card my-2">
+    <div class="card-body row">
+        @if (Model.Image != null)
+        {
+            <div class="col-md-3">
+                <span class="ml-4">Step: @Model.Order</span>
+                <img class="img-fluid" src="@Model.Image.GetImageSource()" alt="" />
+            </div>
+        }
+        <div class="@stepColumnSize">
+
+            <h5 class="card-title">
+                @Model.Title            @if (ViewBag.IsOwner)
+                {
+
+                 <a class="float-right" href="/recipes/DeleteStep?Id=@Model.ID"><i class="fas fa-trash-alt"></i></a>
+                 }
+            </h5>
+
+
+            <p class="card-text">@Model.Description</p>
+        </div>
+    </div>
+</div>

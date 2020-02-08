@@ -1,0 +1,49 @@
+﻿@model IEnumerable<TastyMVC.Models.IngredientSize>
+
+<h5 class="card-title">Ingredients</h5>
+@if (Model == null)
+{
+    <p class="card-subtitle mb-2 text-muted">No Ingredients added yet</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table  table-sm">
+            <thead>
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Unit</th>
+                    <th>Amount</th>
+                    @if (ViewBag.IsOwner)
+                    {
+                        <th></th>
+                    }
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.Ingredient.Name
+                        </td>
+                        <td>
+                            @item.Unit.Name
+                        </td>
+                        <td>
+                            @item.Amount
+                        </td>
+                        @if (ViewBag.IsOwner)
+                        {
+                            <td>
+                                <a href="/recipes/DeleteIngredient?id=@item.Id"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                        }
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
