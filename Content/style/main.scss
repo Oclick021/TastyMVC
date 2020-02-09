@@ -4,5 +4,11 @@
 body {
     margin : 0;
 }
+.fit-image {
+    width: 100%;
+    object-fit: cover;
+    height: 300px; /* only if you want fixed height */
+}
+
 
 

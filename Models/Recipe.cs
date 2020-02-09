@@ -15,11 +15,12 @@ namespace TastyMVC.Models
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
         public string Title { get; set; }
-        public int portion { get; set; } = 1;
+        public int Portion { get; set; } = 1;
    public bool Published { get; set; }
         public Image Thumbnail { get; set; }
         public List<IngredientSize> Ingredients { get; set; } = new List<IngredientSize>();
-
+        public Category Category { get; set; }
+        public string CategoryID { get; set; }
         public List<RecipeStep> Steps { get; set; } = new List<RecipeStep>();
     }
 }

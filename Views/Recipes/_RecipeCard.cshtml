@@ -1,0 +1,14 @@
+﻿@model TastyMVC.Models.Recipe
+
+    <a href="@Url.Action("Details", "Recipes", new { id = @Model.Id })">
+
+
+        <div class="card">
+            <img class="card-img-top img-fluid fit-image" src="@Model.Thumbnail.GetImageSource()" alt="Card image cap">
+            <div class="card-body">
+                <span class="card-title">@Model.Category.Name</span>
+
+                <h5 class="card-title">@Model.Title</h5>
+            </div>
+        </div>
+    </a>

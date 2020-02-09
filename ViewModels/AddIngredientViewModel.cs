@@ -8,7 +8,7 @@ namespace TastyMVC.ViewModels
 {
     public class AddIngredientViewModel
     {
-        public Guid RecipeID { get; set; }
+        public Guid IngredientRecipeID { get; set; }
         [Required]
         [Display(Name ="Ingredient name please")]
         public string Ingredient { get; set; }
@@ -19,7 +19,7 @@ namespace TastyMVC.ViewModels
         public IEnumerable<MeasurementUnit> AllUnits { get; set; }
         public AddIngredientViewModel(Guid recipeID)
         {
-            RecipeID = recipeID;
+            IngredientRecipeID = recipeID;
             var rep = new Repository();
             AllIngredients = rep.GetAllIngredients();
             AllUnits = rep.GetAllUnits();

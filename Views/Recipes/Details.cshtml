@@ -2,13 +2,21 @@
 
 @{
     ViewBag.Title = "Details";
+    ViewBag.Message = TempData["Message"];
 }
 
-<h2>Details</h2>
 
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
 <div>
     <div class="row">
-        <h3 class="col-md-6">@Model.Title</h3>
+        <h3 class="col-md-12">@Model.Title</h3>
+        <h6 class="col-md-3">@Model.Category.Name</h6>
+
         <h6 class="offset-sm-3 col-md-3">@Model.CreatedOn</h6>
 
     </div>

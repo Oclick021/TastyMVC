@@ -14,14 +14,14 @@ namespace TastyMVC.ViewModels
         public string Description { get; set; }
         [DataType(DataType.Upload)]
         public HttpPostedFile Image { get; set; }
-        public Guid RecipeID { get; set; }
+        public Guid StebRecipeID { get; set; }
         public AddFoodStepViewModel()
         {
 
         }
         public AddFoodStepViewModel(Guid recipeID)
         {
-            RecipeID = recipeID;
+            StebRecipeID = recipeID;
         }
     }
 }

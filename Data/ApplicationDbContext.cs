@@ -11,6 +11,8 @@ namespace TastyMVC.Models
         public DbSet<MeasurementUnit> MeasurementUnits { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<RecipeStep> RecipeSteps { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

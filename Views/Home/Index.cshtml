@@ -1,4 +1,17 @@
-﻿@{
+﻿@model TastyMVC.ViewModels.HomePageViewModel
+@{
     ViewBag.Title = "Home Page";
 }
-    <h3>development</h3>
+<div class="container">
+
+    <div class="row">
+        @foreach (var recipe in Model.PublishedRecipes)
+        {
+            <div class="col-12 col-lg-4 col-md-6 col-sm-6">
+                @{ 
+                    Html.RenderPartial("~/Views/Recipes/_RecipeCard.cshtml", recipe);
+                }
+            </div>
+        }
+    </div>
+</div>

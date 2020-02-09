@@ -8,7 +8,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create",null, htmlAttributes: new { @class = "btn btn-primary" })
 </p>
 <table class="table">
     <tr>
@@ -19,7 +19,7 @@
             @Html.DisplayNameFor(model => model.Title)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.portion)
+            @Html.DisplayNameFor(model => model.Portion)
         </th>
         <th>Published</th>
         <th></th>
@@ -35,7 +35,7 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td class="align-middle">
-                @Html.DisplayFor(modelItem => item.portion)
+                @Html.DisplayFor(modelItem => item.Portion)
             </td>
             <td class="align-middle">
                 @if (item.Published)

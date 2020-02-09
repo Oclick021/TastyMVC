@@ -181,6 +181,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Data\Repository.cs" />
@@ -239,7 +240,12 @@
     <Compile Include="Migrations\202002082013334_recipeIdadded.Designer.cs">
       <DependentUpon>202002082013334_recipeIdadded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002091136290_categoryidAdded.cs" />
+    <Compile Include="Migrations\202002091136290_categoryidAdded.Designer.cs">
+      <DependentUpon>202002091136290_categoryidAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -247,6 +253,7 @@
     <Compile Include="Models\Ingredient.cs" />
     <Compile Include="Models\IngredientSize.cs" />
     <Compile Include="ViewModels\AddFoodStepViewModel.cs" />
+    <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
     <Compile Include="Models\MeasurementUnit.cs" />
     <Compile Include="Models\Recipe.cs" />
@@ -255,6 +262,7 @@
     <Compile Include="Controllers\RecipesController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AddIngredientViewModel.cs" />
+    <Compile Include="ViewModels\RecipeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\img\logo.png" />
@@ -412,16 +420,20 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\Navbar.cshtml" />
-    <Content Include="Views\Recipes\Create.cshtml" />
+    <Content Include="Views\Recipes\RecipeForm.cshtml" />
     <Content Include="Views\Recipes\Delete.cshtml" />
     <Content Include="Views\Recipes\Details.cshtml" />
-    <Content Include="Views\Recipes\Edit.cshtml" />
     <Content Include="Views\Recipes\Index.cshtml" />
-    <Content Include="Views\Recipes\RecipeCard.cshtml" />
     <Content Include="Views\Recipes\_Ingredients.cshtml" />
     <Content Include="Views\Recipes\_IngredientForm.cshtml" />
     <Content Include="Views\Recipes\_RecipeStep.cshtml" />
     <Content Include="Views\Recipes\_RecipeStepForm.cshtml" />
+    <Content Include="Views\Categories\Create.cshtml" />
+    <Content Include="Views\Categories\Delete.cshtml" />
+    <Content Include="Views\Categories\Details.cshtml" />
+    <Content Include="Views\Categories\Edit.cshtml" />
+    <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Recipes\_RecipeCard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -475,6 +487,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002082013334_recipeIdadded.resx">
       <DependentUpon>202002082013334_recipeIdadded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002091136290_categoryidAdded.resx">
+      <DependentUpon>202002091136290_categoryidAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

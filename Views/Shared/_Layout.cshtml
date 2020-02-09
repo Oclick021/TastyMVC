@@ -29,5 +29,14 @@
 
     @Scripts.Render("~/bundles/jqueryval")
 
+    <script>
+     $(document).ready(function () {
+if ('@ViewBag.Position' != "") {
+            $('html, body').animate({
+             scrollTop: $('@ViewBag.Position' ).offset().top
+            }, 2000);
+        }
+});
+    </script>
 </body>
 </html>
