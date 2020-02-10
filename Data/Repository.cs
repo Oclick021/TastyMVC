@@ -87,6 +87,28 @@ namespace TastyMVC.Data
                       .Include(r => r.Thumbnail)
                       .Include(x => x.Category).ToList();
         }
+        public IEnumerable<Recipe> SearchPublishedRecipes(string search)
+        {
+            var recipes = dbContext.Recipes
+                      .Where(x => x.Published == true )
+                      .Include(r => r.Ingredients.Select(x => x.Ingredient))
+                      .Include(r => r.Ingredients.Select(x => x.Unit))
+                      .Include(r => r.Steps.Select(x => x.Image))
+                      .Include(r => r.Thumbnail)
+                      .Include(x => x.Category).ToList();
+            var found = new List<Recipe>();
+            foreach (var recipe in recipes)
+            {
+                if (recipe.Title.Contains(search) ||
+                    recipe.Ingredients.Any(i => i.Ingredient.Name.Contains(search)) ||
+                    recipe.Steps.Any(s => s.Title.Contains(search) || s.Description.Contains(search)))
+                {
+                    found.Add(recipe);
+                }
+            }
+            return found;
+
+        }
 
     }
 }

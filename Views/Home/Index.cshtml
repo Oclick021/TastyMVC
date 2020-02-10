@@ -14,8 +14,10 @@
         <div class="col-md-9">
 
             <div class="row">
-                @for (int i = 0; i < 12; i++)
+                @if (Model.PublishedRecipes != null)
                 {
+
+
 
                     foreach (var recipe in Model.PublishedRecipes)
                     {
@@ -26,6 +28,12 @@
                         </div>
 
                     }
+                }
+                else
+                {
+                    <div class="alert alert-secondary  my-2" role="alert">
+                       No recipe sorry. Maybe order a take out!?
+                    </div>
                 }
             </div>
 

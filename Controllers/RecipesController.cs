@@ -32,6 +32,22 @@ namespace TastyMVC
             
             return View(repository.GetUsersRecipes(currentUser.Id));
         }
+        [AllowAnonymous]
+        public ActionResult Search(string search)
+        {
+            search = search.Trim();
+
+            var homeViewModel = new HomePageViewModel()
+            {
+
+                CategoryViewModel = new CategoryViewModel()
+            };
+            if (!string.IsNullOrEmpty(search))
+            {
+                homeViewModel.PublishedRecipes = repository.SearchPublishedRecipes(search);
+            }
+            return View("~/Views/Home/Index.cshtml",homeViewModel);
+        }
 
         public ActionResult Publish(Guid? id)
         {
@@ -54,7 +70,7 @@ namespace TastyMVC
 
         }
 
-
+        [AllowAnonymous]
         // GET: Recipes/Details/5
         public ActionResult Details(Guid? id)
         {
@@ -67,7 +83,7 @@ namespace TastyMVC
             {
                 return HttpNotFound();
             }
-            if (recipe.CreatedBy == currentUser.Id)
+            if (currentUser != null && recipe.CreatedBy == currentUser.Id)
             {
                 ViewBag.IsOwner = true;
             }
