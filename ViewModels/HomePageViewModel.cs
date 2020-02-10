@@ -9,7 +9,6 @@ namespace TastyMVC.ViewModels
     public class HomePageViewModel
     {
         public IEnumerable<Recipe> PublishedRecipes { get; set; }
-        public IEnumerable<Category> Categories { get; set; }
-        
+        public CategoryViewModel CategoryViewModel { get; set; }
     }
 }

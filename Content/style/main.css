@@ -6034,3 +6034,6 @@ body {
   object-fit: cover;
   height: 300px;
   /* only if you want fixed height */ }
+
+.active a {
+  color: white; }

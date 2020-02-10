@@ -22,7 +22,7 @@ namespace TastyMVC.Data
         }
         public Ingredient GetIngredientByName(string name)
         {
-           return dbContext.Ingredients.Where(x => x.Name == name).FirstOrDefault();
+            return dbContext.Ingredients.Where(x => x.Name == name).FirstOrDefault();
         }
         public IEnumerable<MeasurementUnit> GetAllUnits()
         {
@@ -31,6 +31,19 @@ namespace TastyMVC.Data
         public IEnumerable<Category> GetAllCategories()
         {
             return dbContext.Categories;
+        }
+        public Dictionary<Category, int> GetCategoriesWithCount()
+        {
+            var dictionary = new Dictionary<Category, int>();
+            var categories = GetAllCategories();
+            var allrecipes = GetPublishedRecipes();
+
+            foreach (var category in categories)
+            {
+                var count = allrecipes.Where(x => x.Category.Id == category.Id).Count();
+                dictionary.Add(category, count);
+            }
+            return dictionary;
         }
         public Category GetCategory(Guid Id)
         {
@@ -49,17 +62,23 @@ namespace TastyMVC.Data
         }
         public void UpdateRecipe(Recipe recipe)
         {
-                   dbContext.Entry(recipe).State = EntityState.Modified;
-                dbContext.SaveChanges();
+            dbContext.Entry(recipe).State = EntityState.Modified;
+            dbContext.SaveChanges();
         }
 
         public IEnumerable<Recipe> GetUsersRecipes(string userID)
         {
             return dbContext.Recipes.Include(r => r.Thumbnail).Where(x => x.CreatedBy.ToString() == userID).ToList();
         }
+        public IEnumerable<Recipe> GetPublishedRecipesByCategoryName(string categoryName)
+        {
+            var recipes = GetPublishedRecipes();
+            return recipes.Where(x => x.Category.Name == categoryName);
+        }
 
 
-        public IEnumerable<Recipe> GetPublishedRecipes() {
+        public IEnumerable<Recipe> GetPublishedRecipes()
+        {
             return dbContext.Recipes
                       .Where(x => x.Published == true)
                       .Include(r => r.Ingredients.Select(x => x.Ingredient))

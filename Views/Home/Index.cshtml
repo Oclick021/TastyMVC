@@ -5,13 +5,30 @@
 <div class="container">
 
     <div class="row">
-        @foreach (var recipe in Model.PublishedRecipes)
-        {
-            <div class="col-12 col-lg-4 col-md-6 col-sm-6">
-                @{ 
-                    Html.RenderPartial("~/Views/Recipes/_RecipeCard.cshtml", recipe);
+        <div class="col-md-3 my-2">
+            @{
+                Html.RenderPartial("~/Views/Recipes/_RecipeCategoryList.cshtml", Model.CategoryViewModel);
+            }
+        </div>
+
+        <div class="col-md-9">
+
+            <div class="row">
+                @for (int i = 0; i < 12; i++)
+                {
+
+                    foreach (var recipe in Model.PublishedRecipes)
+                    {
+                        <div class="col-12 col-lg-4 col-md-6 col-sm-6 my-2">
+                            @{
+                                Html.RenderPartial("~/Views/Recipes/_RecipeCard.cshtml", recipe);
+                            }
+                        </div>
+
+                    }
                 }
             </div>
-        }
+
+        </div>
     </div>
 </div>

@@ -1,0 +1,30 @@
+﻿@model TastyMVC.ViewModels.CategoryViewModel
+
+
+<ul class="list-group">
+    @foreach (var category in Model.Categories)
+    {
+        if (category.Value > 0)
+        {
+
+            var classVal = "";
+            var link = "";
+            if (category.Key.Name == Model.SelectedCategory)
+            {
+                classVal = "active";
+            }
+
+            <li class="list-group-item d-flex justify-content-between align-items-center @classVal">
+
+                <a href="?category=@category.Key.Name">
+                    <span class="badge badge-primary badge-pill">@category.Value</span>
+                    @category.Key.Name
+                </a>
+            </li>
+        }
+
+    }
+
+
+
+</ul>

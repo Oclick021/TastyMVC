@@ -29,7 +29,7 @@ namespace TastyMVC
         // GET: Recipes
         public ActionResult Index()
         {
-
+            
             return View(repository.GetUsersRecipes(currentUser.Id));
         }
 

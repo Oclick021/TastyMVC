@@ -253,6 +253,7 @@
     <Compile Include="Models\Ingredient.cs" />
     <Compile Include="Models\IngredientSize.cs" />
     <Compile Include="ViewModels\AddFoodStepViewModel.cs" />
+    <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
     <Compile Include="Models\MeasurementUnit.cs" />
@@ -434,6 +435,7 @@
     <Content Include="Views\Categories\Edit.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
     <Content Include="Views\Recipes\_RecipeCard.cshtml" />
+    <Content Include="Views\Recipes\_RecipeCategoryList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

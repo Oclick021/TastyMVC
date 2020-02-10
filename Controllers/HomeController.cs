@@ -18,7 +18,7 @@ namespace TastyMVC.Controllers
         {
             repository = new Repository();
         }
-        public ActionResult Index()
+        public ActionResult Index(string category)
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
             if (!roleManager.RoleExists("IsAdmin"))
@@ -42,9 +42,22 @@ namespace TastyMVC.Controllers
                 roleManager.Create(role);
             }
 
+          
+
             var homeViewModel = new HomePageViewModel() { 
-                PublishedRecipes = repository.GetPublishedRecipes(),
-                Categories = repository.GetAllCategories()};
+                
+                CategoryViewModel = new CategoryViewModel()
+            };
+
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                homeViewModel.PublishedRecipes = repository.GetPublishedRecipes();
+            }
+            else
+            {
+                homeViewModel.PublishedRecipes = repository.GetPublishedRecipesByCategoryName(category);
+                homeViewModel.CategoryViewModel.SelectedCategory = category;
+            }
             return View(homeViewModel);
         }
         [Route("About")]
